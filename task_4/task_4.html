@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8"/>
+	<title>task_4</title>
+	<style type="text/css">
+		li{ width: 50px;
+			height: 50px;
+			line-height: 50px;
+			background-color: #f00;
+			list-style: none;
+			border: 1px solid black;
+			margin: 5px;
+			text-align: center;
+			display: inline-block;
+		}
+	</style>
+</head>
+<body>
+	<input type="text" id="num_add">
+	<input id="left-in" type="button" value="左侧入">
+	<input id="right-in" type="button" value="右侧入">
+	&nbsp;&nbsp;	
+	<input id="left-out" type="button" value="左侧出">
+	<input id="right-out" type="button" value="右侧出">
+	<ul id="queue"></ul>
+	<script type="text/javascript">
+		//绑定变量
+		var num_add = document.getElementById('num_add');
+		var queue = document.getElementById('queue');
+		var left_in = document.getElementById('left-in');
+		var right_in = document.getElementById('right-in');
+		var left_out = document.getElementById('left-out');
+		var right_out = document.getElementById('right-out');
+		//插入数字
+		function add (direction) {
+			//判断输入是否为空，空则弹窗返回
+			if (num_add.value === ""|| isNaN(num_add.value)) {
+				alert("输入为空或输入非数字!");
+			}else {				
+				//判断输入方向
+				//方向为left
+				var newli = document.createElement('li');
+				if(direction === "left") {
+					newli.innerHTML = num_add.value;
+					queue.insertBefore(newli,queue.firstChild);
+				}
+				//方向为right
+				if(direction === "right") {
+					newli.innerHTML = num_add.value;
+					queue.appendChild(newli);
+				}
+			}
+		}
+		function del (node, direction){
+			//是否为空，空则删除失败
+			if (queue.childNodes.length <= 0) {
+				alert("空队列！");
+				return false;
+			}else {
+				if(direction === "left") {
+					alert("删除数字为"+queue.firstChild.innerHTML+"的节点");
+					queue.removeChild(queue.firstChild);
+				}
+				//方向为right
+				if(direction === "right") {
+					alert("删除数字为"+queue.lastChild.innerHTML+"的节点");
+					queue.removeChild(queue.lastChild);
+				}
+				//点击删除
+				else {
+					alert("删除数字为"+queue.removeChild(node).innerHTML+"的节点");
+				}
+			}
+		}
+		//绑定按钮
+		left_in.onclick = function(){add("left")};
+		right_in.onclick = function(){add("right")};
+		left_out.onclick = function(){del(-1,"left")};
+		right_out.onclick = function(){del(-1,"right")};
+		queue.onclick = function(){del(event.target)};
+	</script>
+</body>	
+</html>

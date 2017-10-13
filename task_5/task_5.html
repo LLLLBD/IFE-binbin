@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8"/>
+	<title>task_5</title>
+	<style type="text/css">
+		ul{
+			height: 100px;
+			position: relative;
+		}
+		li{ 
+			width: 20px;
+			background-color: #f00;
+			list-style: none;
+			margin:0 5px;
+			display: inline-block;
+		}
+		li:hover {
+			background-color: #f0f;
+		}
+	</style>
+</head>
+<body>
+	<input type="text" id="num_add">
+	<input id="left-in" type="button" value="左侧入">
+	<input id="right-in" type="button" value="右侧入">
+	&nbsp;&nbsp;	
+	<input id="left-out" type="button" value="左侧出">
+	<input id="right-out" type="button" value="右侧出">
+	<input id="sort" type="button" value="排序">
+	<ul id="queue"></ul>
+	<script type="text/javascript">
+		//绑定变量
+		var num_add = document.getElementById('num_add');
+		var queue = document.getElementById('queue');
+		var left_in = document.getElementById('left-in');
+		var right_in = document.getElementById('right-in');
+		var left_out = document.getElementById('left-out');
+		var right_out = document.getElementById('right-out');
+		var sort = document.getElementById('sort');
+		//插入数字
+		function add (direction) {
+			//判断输入是否为空，空则弹窗返回
+			if (num_add.value === ""|| isNaN(num_add.value)){
+				alert("输入为空或输入非数字!");
+			}
+			if(parseInt(num_add.value) < 10 || parseInt(num_add.value) > 100){
+				alert("输入在10-100之间！");
+			}else{				
+				//判断输入方向
+				//方向为left
+				var newli = document.createElement('li');
+				newli.style.height = num_add.value+'px';
+				newli.style.marginTop= (100-num_add.value)+'px';
+				if(queue.children.length >= 60){
+					alert("溢出！");
+					return false;
+				}
+				if(direction === "left") {
+					
+					queue.insertBefore(newli,queue.firstChild);
+				}
+				//方向为right
+				if(direction === "right") {
+					
+					queue.appendChild(newli);
+				}
+			}
+		}
+		function del (node, direction){
+			//是否为空，空则删除失败
+			if (queue.childNodes.length <= 0) {
+				alert("空队列！");
+				return false;
+			}else {
+				if(direction === "left") {
+					alert("删除数字为"+queue.firstChild.innerHTML+"的节点");
+					queue.removeChild(queue.firstChild);
+				}
+				//方向为right
+				if(direction === "right") {
+					alert("删除数字为"+queue.lastChild.innerHTML+"的节点");
+					queue.removeChild(queue.lastChild);
+				}
+				//点击删除
+				else {
+					queue.length=-1;
+					alert("删除数字为"+queue.removeChild(node).innerHTML+"的节点");
+				}
+			}
+		}
+		//排序
+		function i_sort(){
+			var queue0 = document.getElementById('queue');
+			var len = queue0.children.length;
+			if(len <= 1) {
+				return;
+			}
+			for (var i = 0; i<len ; i++) {
+				for(j=0;j<len-i-1;j++)
+					setTimeout((function(k){
+						var ul0 = document.getElementById("queue");
+						var nodes = ul0.childNodes;
+						var k0 = parseInt(nodes[k].style.height);
+						var k1 = parseInt(nodes[k+1].style.height);
+						if(k0 > k1) {							
+								nodes[k].style.height = k1 + "px";
+								nodes[k].style.marginTop = (100 - k1) + "px";
+								nodes[k+1].style.height = k0 + "px";
+								nodes[k+1].style.marginTop = (100 - k0) + "px";						
+						}
+					})(j),1000);
+			}
+
+		}
+		//绑定按钮
+		left_in.onclick = function(){add("left")};
+		right_in.onclick = function(){add("right")};
+		left_out.onclick = function(){del(-1,"left")};
+		right_out.onclick = function(){del(-1,"right")};
+		queue.onclick = function(){del(event.target)};
+		sort.onclick = function(){i_sort()};
+	</script>
+</body>	
+</html>
